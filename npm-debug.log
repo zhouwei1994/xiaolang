@@ -10,8 +10,8 @@
 6 silly lifecycle xiaolang@1.0.0~predev: no script for predev, continuing
 7 info lifecycle xiaolang@1.0.0~dev: xiaolang@1.0.0
 8 verbose lifecycle xiaolang@1.0.0~dev: unsafe-perm in lifecycle true
-9 verbose lifecycle xiaolang@1.0.0~dev: PATH: D:\nodejs\node_modules\npm\bin\node-gyp-bin;D:\wwww\xiaolang\node_modules\.bin;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_101\bin;C:\Program Files\Java\jdk1.8.0_101\jre\bin;D:\nodejs\;C:\Program Files\TortoiseSVN\bin;d:\Git\cmd;D:\AppServ\Apache2.2\bin;D:\AppServ\php5;D:\AppServ\MySQL\bin;C:\Users\Administrator\AppData\Roaming\npm;D:\VSCode\Microsoft VS Code\bin;D:\DriverGenius;D:\DriverGenius\ksoft
-10 verbose lifecycle xiaolang@1.0.0~dev: CWD: D:\wwww\xiaolang
+9 verbose lifecycle xiaolang@1.0.0~dev: PATH: D:\nodejs\node_modules\npm\bin\node-gyp-bin;D:\www\xiaolang\node_modules\.bin;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Program Files\Java\jdk1.8.0_101\bin;C:\Program Files\Java\jdk1.8.0_101\jre\bin;D:\nodejs\;C:\Program Files\TortoiseSVN\bin;d:\Git\cmd;D:\AppServ\Apache2.2\bin;D:\AppServ\php5;D:\AppServ\MySQL\bin;C:\Users\Administrator\AppData\Roaming\npm;D:\VSCode\Microsoft VS Code\bin
+10 verbose lifecycle xiaolang@1.0.0~dev: CWD: D:\www\xiaolang
 11 silly lifecycle xiaolang@1.0.0~dev: Args: [ '/d /s /c', 'node build/dev-server.js' ]
 12 silly lifecycle xiaolang@1.0.0~dev: Returned: code: 3221225786  signal: null
 13 info lifecycle xiaolang@1.0.0~dev: Failed to exec dev script
@@ -26,7 +26,7 @@
 14 verbose stack     at maybeClose (internal/child_process.js:877:16)
 14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:226:5)
 15 verbose pkgid xiaolang@1.0.0
-16 verbose cwd D:\wwww\xiaolang
+16 verbose cwd D:\www\xiaolang
 17 error Windows_NT 6.1.7601
 18 error argv "D:\\nodejs\\node.exe" "D:\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "run" "dev"
 19 error node v6.9.1
