@@ -12,8 +12,14 @@
           </div>
         </div>
         <p>{{userInfo.username}}</p>
-        <div class="level">游戏代理：二级代理</div>
-        <div class="level">创业推广大使：小灰灰</div>
+        <div class="level" v-if="userInfo.level == 0">游戏代理：未注册</div>
+        <div class="level" v-if="userInfo.level == 1">游戏代理：一般会员</div>
+        <div class="level" v-if="userInfo.level == 2">游戏代理：二级游戏代理</div>
+        <div class="level" v-if="userInfo.level == 3">游戏代理：三级游戏代理</div>
+        <div class="level" v-if="userInfo.wolfLevel == 0">创业推广大使：非创业推广大使</div>
+        <div class="level" v-if="userInfo.wolfLevel == 4">创业推广大使：小灰灰</div>
+        <div class="level" v-if="userInfo.wolfLevel == 5">创业推广大使：灰太狼</div>
+        <div class="level" v-if="userInfo.wolfLevel == 6">创业推广大使：红太狼</div>
       </div>
     </div>
 
@@ -21,45 +27,45 @@
       <div class="incomeDisplay">
         <div class="incomeType" :class="{'current':incomeState == 1}" @click="incomeState = 1">
           <div class="child">总收益</div>
-          <div class="child">500</div>
+          <div class="child">{{incomeInfo.totalIncome}}</div>
           <div class="details incomeDisplay">
             <div class="incomeType">
               <div class="child">分享奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.shareAward}}</div>
             </div>
             <div class="incomeType">
               <div class="child">直接奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.directiveAward}}</div>
             </div>
             <div class="incomeType">
               <div class="child">间接奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.indirectiveAward}}</div>
             </div>
           </div>
           <div class="arrow"></div>
         </div>
         <div class="incomeType" :class="{'current':incomeState == 2}" @click="incomeState = 2">
           <div class="child">已提现</div>
-          <div class="child">500</div>
+          <div class="child">{{incomeInfo.hasDraw}}</div>
           <div class="details incomeDisplay">
             <div class="incomeType">
               <div class="child">分享奖</div>
-              <div class="child">20</div>
+              <div class="child">{{incomeInfo.share}}</div>
             </div>
             <div class="incomeType">
               <div class="child">直接奖</div>
-              <div class="child">288</div>
+              <div class="child">{{incomeInfo.directive}}</div>
             </div>
             <div class="incomeType">
               <div class="child">间接奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.indirective}}</div>
             </div>
           </div>
           <div class="arrow"></div>
         </div>
         <div class="incomeType" :class="{'current':incomeState == 3}" @click="incomeState = 3">
           <div class="child">未提现</div>
-          <div class="child">500</div>
+          <div class="child">{{incomeInfo.notDraw}}</div>
         </div>
       </div>
     </div>
@@ -139,12 +145,23 @@
   </div>
 </template>
 <script>
-import { getUserInfo } from '@/api/user'
+import { getUserInfo,revenueObvious } from '@/api/user'
 export default {
   data() {
     return {
       incomeState: 1,
-      userInfo: {}
+      userInfo: {},
+      incomeInfo:{
+        "totalIncome": '--',
+        "hasDraw": '--',
+        "notDraw": '--',
+        "shareAward": '--',
+        "directiveAward": '--',
+        "indirectiveAward": '--',
+        "share": '--',
+        "directive": '--',
+        "indirective": '--'
+      }
     }
   },
   methods: {
@@ -154,6 +171,15 @@ export default {
         data => {
           if (data.code == 200) {
             this.userInfo = data.data;
+          } else {
+            this.prompt(data.msg);
+          }
+        }
+      );
+      revenueObvious().then(
+        data => {
+          if (data.code == 200) {
+            this.incomeInfo = data.data;
           } else {
             this.prompt(data.msg);
           }

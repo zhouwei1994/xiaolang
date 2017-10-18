@@ -3,7 +3,7 @@
     <div class="inputBox">
       <label>我的上级</label>
       <div class="superior">
-        <span>抹茶</span>
+        <span>{{superior}}</span>
       </div>
     </div>
     <div class="inputBox">
@@ -92,7 +92,7 @@
 </template>
 <script>
 import picker from 'vue-3d-picker';
-import { myCode, register } from '@/api/user'
+import { myCode, register, setSuperior } from '@/api/user'
 const age = [
   { name: '20以下', value: 0 },
   { name: '20-30', value: 1 },
@@ -121,9 +121,9 @@ export default {
       //验证码
       code: '',
       // 提现密码
-      password:'',
+      password: '',
       //确认密码
-      detePassword:'',
+      detePassword: '',
       //性别
       sex: '',
       //年龄选择状态
@@ -151,12 +151,25 @@ export default {
       //发送验证码文字
       codeText: '获取验证码',
       readonly: false,
+      superior:''
     }
   },
   mounted() {
     document.title = '会员注册';
+    this.pageData();
   },
   methods: {
+    pageData() {
+      setSuperior(this.$route.params.id).then(
+        data => {
+          if (data.code == 200) {
+            _this.superior = data;
+          } else {
+            _this.prompt(data.msg);
+          }
+        }
+      );
+    },
     onAgeChange(val) {
       console.log(val);
       this.ageValue = val;
@@ -231,7 +244,7 @@ export default {
       } else if (this.areaValue.value === -1) {
         this.prompt('请选择地区');
       } else {
-        register(this.$route.params.id, this.gameId, this.name, this.phone, this.code, this.sex, this.ageValue.value, this.areaValue.value,this.password).then(
+        register(this.$route.params.id, this.gameId, this.name, this.phone, this.code, this.sex, this.ageValue.value, this.areaValue.value, this.password).then(
           data => {
             if (data.code == 200) {
               //注册成功

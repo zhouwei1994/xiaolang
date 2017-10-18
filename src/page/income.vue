@@ -8,45 +8,45 @@
       <div class="incomeDisplay">
         <div class="incomeType" :class="{'current':incomeState == 1}" @click="incomeState = 1">
           <div class="child">总收益</div>
-          <div class="child">500</div>
+          <div class="child">{{incomeInfo.totalIncome}}</div>
           <div class="details incomeDisplay">
             <div class="incomeType">
               <div class="child">分享奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.shareAward}}</div>
             </div>
             <div class="incomeType">
               <div class="child">直接奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.directiveAward}}</div>
             </div>
             <div class="incomeType">
               <div class="child">间接奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.indirectiveAward}}</div>
             </div>
           </div>
           <div class="arrow"></div>
         </div>
         <div class="incomeType" :class="{'current':incomeState == 2}" @click="incomeState = 2">
           <div class="child">已提现</div>
-          <div class="child">500</div>
+          <div class="child">{{incomeInfo.hasDraw}}</div>
           <div class="details incomeDisplay">
             <div class="incomeType">
               <div class="child">分享奖</div>
-              <div class="child">20</div>
+              <div class="child">{{incomeInfo.share}}</div>
             </div>
             <div class="incomeType">
               <div class="child">直接奖</div>
-              <div class="child">288</div>
+              <div class="child">{{incomeInfo.directive}}</div>
             </div>
             <div class="incomeType">
               <div class="child">间接奖</div>
-              <div class="child">500</div>
+              <div class="child">{{incomeInfo.indirective}}</div>
             </div>
           </div>
           <div class="arrow"></div>
         </div>
         <div class="incomeType" :class="{'current':incomeState == 3}" @click="incomeState = 3">
           <div class="child">未提现</div>
-          <div class="child">500</div>
+          <div class="child">{{incomeInfo.notDraw}}</div>
         </div>
       </div>
       <div class="withdraw" @click="$router.push('/withdraw')">
@@ -72,12 +72,23 @@
   </div>
 </template>
 <script>
-import { getFlowingWater } from '@/api/user'
+import { getFlowingWater, revenueObvious } from '@/api/user'
 import { loadMore } from '@/components/common/mixin'
 export default {
   data() {
     return {
       incomeState: 1,
+      incomeInfo: {
+        "totalIncome": '--',
+        "hasDraw": '--',
+        "notDraw": '--',
+        "shareAward": '--',
+        "directiveAward": '--',
+        "indirectiveAward": '--',
+        "share": '--',
+        "directive": '--',
+        "indirective": '--'
+      },
       waterList: [],
       pageNo: 1,
       pageSize: 7,
@@ -88,7 +99,15 @@ export default {
   methods: {
     //页面数据
     pageData() {
-
+      revenueObvious().then(
+        data => {
+          if (data.code == 200) {
+            this.incomeInfo = data.data;
+          } else {
+            this.prompt(data.msg);
+          }
+        }
+      );
     },
     //到达底部加载更多数据
     loaderMore() {

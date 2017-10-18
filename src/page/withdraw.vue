@@ -35,13 +35,26 @@
       </div>
     </div>
     <div class="publicBut">
-      <button @click="getWithdraw">保存</button>
+      <button @click="getWithdraw">提交</button>
     </div>
     <div class="description">
       <p>提现奖金说明：</p>
       <p>1.成功申请成为创业商家代理，才能提现奖金。</p>
       <p>2.每推荐成功1个创业商家代理，才能取出10个分享奖励的现金。</p>
       <p>3.提现申请后，第二日到账微信零钱。</p>
+    </div>
+    <div class="mask"></div>
+    <div class="withdrawWindow">
+      <div class="title">
+        提现密码
+      </div>
+      <div class="content">
+        <input type="password" placeholder="请输入提现密码">
+      </div>
+      <div class="operating">
+        <button>取消</button>
+        <button>确定</button>
+      </div>
     </div>
   </div>
 </template>
@@ -204,6 +217,61 @@ export default {
     font-size: rem(24);
     color: #666666;
     line-height: 200%;
+  }
+}
+.mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0, 0.5);
+  z-index: 100;
+}
+.withdrawWindow {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background-color: #FFF;
+  z-index: 101;
+  transform: translateX(-50%) translateY(-50%);
+  width: 90%;
+  border-radius: rem(10);
+  overflow: hidden;
+  .title {
+    text-align: center;
+    padding: rem(30);
+    font-size: rem(36);
+    border-bottom: 1px solid #e5e5e5;
+    color: #666666;
+  }
+  .content {
+    padding: rem(60);
+    input {
+      width: 100%;
+      border: 1px solid #ebebeb;
+      height: rem(90);
+      padding: 0 rem(20);
+      box-sizing: border-box;
+    }
+  }
+  .operating {
+    border-top: 1px solid #e5e5e5;
+    display: flex;
+    button {
+      flex: 1;
+      height: rem(110);
+      font-size: rem(36);
+      background-color: transparent;
+    }
+    button:first-child {
+      border-right: 1px solid #e5e5e5;
+      color: #999999;
+    }
+    button:last-child {
+      color: #f39800;
+    }
+
   }
 }
 </style>

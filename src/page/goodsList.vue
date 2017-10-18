@@ -1,36 +1,68 @@
 <template>
-  <div class="goodsListPage">
+  <div class="goodsListPage" v-load-more="loaderMore" type="1">
     <head-top v-if="$route.params.state == 1">优惠商家</head-top>
     <div class="goodsListBox">
-      <div class="goodsList" v-for="(item,index) of goodsList" @click="$router.push('/goodsDetails');">
+      <div class="goodsList" v-for="(item,index) of goodsList" @click="$router.push('/goodsDetails/'+item.id);">
         <div class="content">
           <div class="goodsImg">
-            <img src="#">
+            <img :src="item.avater">
           </div>
           <div class="text">
-            <h3>热爱时尚与艺术的你一定不愿热爱时尚与艺术的你一定不愿</h3>
-            <p>#破界／bazaar150周年时尚艺术大展#不仅是百年时尚史的精彩回顾周年时尚艺术大展#不仅是百年时尚史的精彩回顾</p>
+            <h3>{{item.title}}</h3>
+            <p>{{item.memo}}</p>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 <script>
+import { setGoodsList } from '@/api/user'
+import { loadMore } from '@/components/common/mixin'
 export default {
-  data () {
+  data() {
     return {
-      goodsList:[
-        1,1,1,1,1,1,1,1
-      ]
+      goodsList: [],
+      pageNo: 1,
+      pageSize: 7,
+      preventRepeatReuqest: false
     }
   },
+  mixins: [loadMore],
   methods: {
-
+    //到达底部加载更多数据
+    loaderMore() {
+      if (this.preventRepeatReuqest) {
+        return
+      }
+      this.preventRepeatReuqest = true;
+      setGoodsList(1,this.pageNo, this.pageSize).then(
+        data => {
+          if (data.code == 200) {
+            this.goodsList = this.goodsList.concat(data.data.list);
+            this.preventRepeatReuqest = false;
+            if (data.data.list.length < this.pageSize) {
+              this.preventRepeatReuqest = true;
+            } else {
+              this.pageNo++;
+            }
+          } else if (data.code == 204) {
+            this.prompt(data.msg);
+            this.preventRepeatReuqest = true;
+          } else {
+            this.prompt(data.msg);
+            this.preventRepeatReuqest = false;
+          }
+        },
+        () => {
+          this.preventRepeatReuqest = true;
+        }
+      );
+    }
   },
   mounted() {
     document.title = '优惠商家';
+    this.loaderMore();
   }
 }
 </script>
@@ -43,11 +75,11 @@ export default {
     .goodsList {
       padding: 0 rem(26);
       .content {
-         border-top: 1px solid #dfdfdf;
-         display: flex;
-         padding: rem(26) 0;
+        border-top: 1px solid #dfdfdf;
+        display: flex;
+        padding: rem(26) 0;
       }
-      &:first-child .content{
+      &:first-child .content {
         border-top: 0;
       }
       &:active {

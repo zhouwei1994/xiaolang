@@ -4,15 +4,27 @@
     <div class="coyotesInfo">
       <div class="msg">
         <div>待注册</div>
-        <div>一般会员</div>
-        <div>游戏代理</div>
-        <div>创业商家代理</div>
+        <div>已注册</div>
+        <div>二级代理</div>
+        <div>三级代理</div>
       </div>
       <div class="msg">
         <div>{{agentInfo.notRegister}}</div>
+        <div>{{agentInfo.notRegister}}</div>
         <div>{{agentInfo.register}}</div>
         <div>{{agentInfo.gameProxy}}</div>
-        <div>{{agentInfo.superProxy}}</div>
+      </div>
+    </div>
+    <div class="coyotesInfo">
+      <div class="msg">
+        <div>小灰灰</div>
+        <div>灰太狼</div>
+        <div>红太狼</div>
+      </div>
+      <div class="msg">
+        <div>{{agentInfo.lowProxy}}</div>
+        <div>{{agentInfo.medProxy}}</div>
+        <div>{{agentInfo.highProxy}}</div>
       </div>
     </div>
     <div class="subordinateTitle">
@@ -30,52 +42,59 @@
   </div>
 </template>
 <script>
-import { getAgentStatistics,anAgent } from '@/api/user'
-import {loadMore} from '@/components/common/mixin'
+import { getAgentStatistics, anAgent } from '@/api/user'
+import { loadMore } from '@/components/common/mixin'
 export default {
-  data () {
+  data() {
     return {
-      agentInfo:{},
+      agentInfo: {
+        "gameProxy": '--',
+        "highProxy": '--',
+        "lowProxy": '--',
+        "medProxy": '--',
+        "notRegister": '--',
+        "register": '--'
+      },
       agentList: [],
       pageNo: 1,
       pageSize: 10,
-      preventRepeatReuqest:false
+      preventRepeatReuqest: false
     }
   },
   mixins: [loadMore],
-  methods:{
+  methods: {
     //页面数据
     pageData() {
       getAgentStatistics().then(
         data => {
           if (data.code == 200) {
             this.agentInfo = data.data;
-          }else{
+          } else {
             this.prompt(data.msg);
           }
         }
       );
     },
     //到达底部加载更多数据
-    loaderMore(){
+    loaderMore() {
       if (this.preventRepeatReuqest) {
-				return
+        return
       }
       this.preventRepeatReuqest = true;
-      anAgent(this.$store.state.userInfo.userId,this.pageNo, this.pageSize).then(
+      anAgent(this.$store.state.userInfo.userId, this.pageNo, this.pageSize).then(
         data => {
           if (data.code == 200) {
             this.agentList = this.agentList.concat(data.data.list);
             this.preventRepeatReuqest = false;
-            if(data.data.list.length < this.pageSize){
+            if (data.data.list.length < this.pageSize) {
               this.preventRepeatReuqest = true;
-            }else{
+            } else {
               this.pageNo++;
             }
-          } else if(data.code == 204){
+          } else if (data.code == 204) {
             this.prompt(data.msg);
             this.preventRepeatReuqest = true;
-          }else{
+          } else {
             this.prompt(data.msg);
             this.preventRepeatReuqest = false;
           }
@@ -84,14 +103,14 @@ export default {
           this.preventRepeatReuqest = true;
         }
       );
-		}
+    }
   },
   mounted() {
     document.title = '我的小狼';
-    if(this.$store.state.userInfo.userId){
+    if (this.$store.state.userInfo.userId) {
       this.pageData();
       this.loaderMore();
-    }else{
+    } else {
       this.$router.push('/registered/0');
     }
   }
@@ -147,7 +166,7 @@ export default {
       div:first-child {
         color: #f39800;
       }
-      div:nth-child(2){
+      div:nth-child(2) {
         text-align: center;
       }
       div:last-child {

@@ -38,6 +38,16 @@ var canBeRaisedApi = () => async('user/allow/'+store.state.userInfo.userId,{});
 var withdrawApi = (amount,openId = store.state.userInfo.openId) => async('user/withdraw',{
   amount,openId
 });
+//收益明显
+var revenueObvious = () => async('user/wallet/'+store.state.userInfo.userId,{});
+//查找上级
+var setSuperior = (openId) => async('user/parent/'+openId,{});
+//聊天二维码
+var setQrcode = () => async('common/qrcode',{});
+//商家列表
+var setGoodsList = (type,pageNo,pageSize) => async('common/product/'+type,{
+  pageNo,pageSize
+});
 export {
   getUserInfo,
   modifyUserInfo,
@@ -51,5 +61,9 @@ export {
   validate,
   newphoneApi,
   canBeRaisedApi,
-  withdrawApi
+  withdrawApi,
+  revenueObvious,
+  setSuperior,
+  setQrcode,
+  setGoodsList
 }

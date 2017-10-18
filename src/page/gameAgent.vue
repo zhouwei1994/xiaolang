@@ -52,6 +52,8 @@ export default {
             this.prompt('支付失败');
           }
         );
+      }else{
+        this.prompt('请选择代理级别');
       }
     }
   },

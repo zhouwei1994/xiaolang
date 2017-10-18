@@ -3,7 +3,7 @@
     <head-top v-if="$route.params.state == 1">创业推广大使</head-top>
     <div class="gameAgentBox">
       <div class="proxy">
-        <div class="selectIcon" :class="{'current':type == 2}" @click="type = 2">
+        <div class="selectIcon" :class="{'current':type == 91}" @click="type = 91">
           <i class="icon"></i>
         </div>
         <div class="proxyText">
@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="proxy">
-        <div class="selectIcon" :class="{'current':type == 3}" @click="type = 3">
+        <div class="selectIcon" :class="{'current':type == 92}" @click="type = 92">
           <i class="icon"></i>
         </div>
         <div class="proxyText">
@@ -26,7 +26,7 @@
         </div>
       </div>
       <div class="proxy">
-        <div class="selectIcon" :class="{'current':type == 4}" @click="type = 4">
+        <div class="selectIcon" :class="{'current':type == 93}" @click="type = 93">
           <i class="icon"></i>
         </div>
         <div class="proxyText">
@@ -52,7 +52,7 @@ export default {
   },
   methods: {
     getWxPay(){
-      if(this.type === 2 || this.type === 3){
+      if(this.type === 91 || this.type === 92 || this.type === 93){
         wxPay(this.type).then(
           data => {
             this.prompt('支付成功！');
@@ -63,6 +63,8 @@ export default {
             this.prompt('支付失败');
           }
         );
+      }else{
+        this.prompt('请选择推广级别');
       }
     }
   },

@@ -8,7 +8,7 @@
       </div>
       <div class="qrCodeInfo">
         <div class="qrCodeBox">
-          <img src="../images/bg.png" alt="">
+          <img :src="qrcode">
         </div>
       </div>
       <div class="introduction">
@@ -18,9 +18,29 @@
   </div>
 </template>
 <script>
+import { setQrcode } from '@/api/user'
 export default {
+  data () {
+    return {
+      qrcode:''
+    }
+  },
+  methods: {
+    pageData(){
+      setQrcode().then(
+        data => {
+          if(data.code == 200){
+            this.qrcode = data.data;
+          }else{
+            this.prompt(data.msg);
+          }
+        }
+      );
+    }
+  },
   mounted() {
     document.title = '交友聊天';
+    this.pageData();
   }
 }
 </script>

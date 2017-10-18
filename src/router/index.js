@@ -73,7 +73,7 @@ const routes = [
   },
   //优惠商家详情
   {
-    path: '/goodsDetails',
+    path: '/goodsDetails/:id',
     name: 'goodsDetails',
     component: resolve => require(['@/page/goodsDetails.vue'], resolve)
   },

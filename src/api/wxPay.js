@@ -5,20 +5,30 @@ import store from '@/config/store';
 function wxPay(type) {
   return new Promise((resolve, reject) => {
     var body, description, origin = type, subject, totalAmount, uid = store.state.userInfo.userId;
-    if (type == 1) {
-      body = '小狼创业商家代理开通支付金额。';
-      description = '创业商家代理';
-      subject = '小狼创业商家代理';
-      totalAmount = 688;
-    } else if (type == 2) {
-      body = '小狼二级商家代理开通支付金额。';
+    if (type == 2) {
+      body = '小狼人二级商家代理开通支付金额。';
       description = '二级商家代理';
-      subject = '小狼二级商家代理';
+      subject = '小狼人二级商家代理';
       totalAmount = 268;
     } else if (type == 3) {
-      body = '小狼三级商家代理开通支付金额。';
+      body = '小狼人三级商家代理开通支付金额。';
       description = '三级商家代理';
-      subject = '小狼三级商家代理';
+      subject = '小狼人三级商家代理';
+      totalAmount = 88;
+    } else if (type == 91) {
+      body = '小狼人推广代理（小灰灰）开通支付金额。';
+      description = '推广代理（小灰灰）';
+      subject = '小狼人推广代理（小灰灰）';
+      totalAmount = 88;
+    } else if (type == 91) {
+      body = '小狼人推广代理（灰太狼）开通支付金额。';
+      description = '推广代理（灰太狼）';
+      subject = '小狼人推广代理（灰太狼）';
+      totalAmount = 88;
+    } else if (type == 93) {
+      body = '小狼人推广代理（红太狼）开通支付金额。';
+      description = '推广代理（红太狼）';
+      subject = '小狼人推广代理（红太狼）';
       totalAmount = 88;
     }
     async('user/signOrder', { body, description, origin, subject, totalAmount, uid }, 'POST').then(
