@@ -136,7 +136,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import 'src/style/mixin';
-@import 'src/style/personal';
 .offlineTitle {
   padding: rem(30) rem(40);
   font-size: rem(30);

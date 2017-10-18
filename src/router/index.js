@@ -77,6 +77,36 @@ const routes = [
     name: 'goodsDetails',
     component: resolve => require(['@/page/goodsDetails.vue'], resolve)
   },
+  //我的推广
+  {
+    path: '/promotion',
+    name: 'promotion',
+    component: resolve => require(['@/page/promotion.vue'], resolve)
+  },
+  //交友聊天
+  {
+    path: '/chatWith',
+    name: 'chatWith',
+    component: resolve => require(['@/page/chatWith.vue'], resolve)
+  },
+  //小狼勋章
+  {
+    path: '/medal',
+    name: 'medal',
+    component: resolve => require(['@/page/medal.vue'], resolve)
+  },
+  //客服
+  {
+    path: '/service',
+    name: 'service',
+    component: resolve => require(['@/page/service.vue'], resolve)
+  },
+  //修改提现密码
+  {
+    path: '/modifyPas/:phone',
+    name: 'modifyPas',
+    component: resolve => require(['@/page/modifyPas.vue'], resolve)
+  },
 ];
 let router = new Router({
   //模式

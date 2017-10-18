@@ -2,7 +2,6 @@ import store from '@/config/store'
 import {
   baseUrl
 } from '@/config/env'
-
 //请求方法
 //noTip不显示提示         success请求成功执行的回调函数
 //option{noTip:true,success:function(){}}

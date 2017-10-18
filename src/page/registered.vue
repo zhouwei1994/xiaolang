@@ -33,6 +33,18 @@
       </div>
     </div>
     <div class="inputBox">
+      <label>提现密码</label>
+      <div class="inputText">
+        <input type="password" v-model="password" placeholder="请输入6位数字提现密码">
+      </div>
+    </div>
+    <div class="inputBox">
+      <label>确认密码</label>
+      <div class="inputText">
+        <input type="password" v-model="detePassword" placeholder="请确认提现密码">
+      </div>
+    </div>
+    <div class="inputBox">
       <label>性　别</label>
       <div class="radioBox">
         <div class="radio" :class="{'current':sex === 0}" @click="sex = 0">
@@ -60,6 +72,12 @@
     <div class="but">
       <button @click="register">立即注册</button>
     </div>
+    <div class="description">
+      <p>说明</p>
+      <p>1.注册成功，即送20元现金奖励。</p>
+      <p>2.注册成功，即获得小狼人勋章，享线下商家消费优惠。</p>
+      <p>3.注册后即可推广，获推广奖励。成功推荐一个注册会员， 奖励20元；成功推荐一个创业商家代理奖励288元； 间接推荐一个商家代理奖励30元。</p>
+    </div>
     <picker v-model="ageBoxState" :data-items="ageItems" @change="onAgeChange">
       <div class="top-content" slot="top-content">
         <span @click="ageBoxState = false">确定</span>
@@ -74,7 +92,7 @@
 </template>
 <script>
 import picker from 'vue-3d-picker';
-import { myCode,register } from '@/api/user'
+import { myCode, register } from '@/api/user'
 const age = [
   { name: '20以下', value: 0 },
   { name: '20-30', value: 1 },
@@ -95,18 +113,22 @@ export default {
   data() {
     return {
       //游戏ID
-      gameId:'',
+      gameId: '',
       //姓名
-      name:'',
+      name: '',
       //手机号
-      phone:'',
+      phone: '',
       //验证码
-      code:'',
+      code: '',
+      // 提现密码
+      password:'',
+      //确认密码
+      detePassword:'',
       //性别
-      sex:'',
+      sex: '',
       //年龄选择状态
       ageBoxState: false,
-      ageValue:{name:'请选择',value: -1},
+      ageValue: { name: '请选择', value: -1 },
       //年龄选择数据
       ageItems: [
         {
@@ -117,7 +139,7 @@ export default {
       ],
       //地区选择状态
       areaBoxState: false,
-      areaValue:{name:'请选择',value: -1},
+      areaValue: { name: '请选择', value: -1 },
       //地区选择数据
       areaItems: [
         {
@@ -127,7 +149,7 @@ export default {
         }
       ],
       //发送验证码文字
-      codeText:'获取验证码',
+      codeText: '获取验证码',
       readonly: false,
     }
   },
@@ -139,7 +161,7 @@ export default {
       console.log(val);
       this.ageValue = val;
     },
-    onAreaChange(val){
+    onAreaChange(val) {
       this.areaValue = val;
     },
     //验证码按钮文字状态
@@ -150,7 +172,7 @@ export default {
       var s = 60;
       clear = setInterval(() => {
         s--;
-        _this.codeText = s+'S后重新获取';
+        _this.codeText = s + 'S后重新获取';
         if (s == 0) {
           clearInterval(clear);
           _this.codeText = "获取验证码";
@@ -167,12 +189,12 @@ export default {
         this.prompt('请填写手机号');
       } else if (!/^[1][3,4,5,7,8][0-9]{9}$/.test(this.phone)) {
         this.prompt('手机号码格式不正确');
-      }else{
+      } else {
         myCode(_this.phone).then(
           data => {
             if (data.code == 200) {
               _this.getCodeState();
-            }else{
+            } else {
               _this.prompt(data.msg);
             }
           }
@@ -182,26 +204,34 @@ export default {
     //立即注册
     register() {
       var _this = this;
-      if(this.$route.params.id === 0){
+      if (this.$route.params.id === 0) {
         this.prompt('获取微信openId失败，请退出重新尝试');
-      }else if(this.gameId == ''){
+      } else if (this.gameId == '') {
         this.prompt('请输入游戏ID');
-      }else if(this.name == ''){
+      } else if (this.name == '') {
         this.prompt('请输入姓名');
-      }else if(this.phone == ''){
+      } else if (this.phone == '') {
         this.prompt('请输入手机号码');
       } else if (!/^[1][3,4,5,7,8][0-9]{9}$/.test(this.phone)) {
         this.prompt('手机号码格式不正确');
-      }else if(this.code == ''){
+      } else if (this.code == '') {
         this.prompt('请输入验证码');
-      }else if(this.sex == ''){
+      } else if (this.password == '') {
+        this.prompt('请输入提现密码');
+      } else if (!/^[0-9]{6}$/.test(this.password)) {
+        this.prompt('提现密码由6位数字组成');
+      } else if (this.detePassword == '') {
+        this.prompt('请确认提现密码');
+      } else if (this.detePassword != this.password) {
+        this.prompt('两次密码不一致');
+      } else if (this.sex == '') {
         this.prompt('请选择性别');
-      }else if(this.ageValue.value === -1){
+      } else if (this.ageValue.value === -1) {
         this.prompt('请选择年龄范围');
-      }else if(this.areaValue.value === -1){
+      } else if (this.areaValue.value === -1) {
         this.prompt('请选择地区');
-      }else{
-        register(this.$route.params.id,this.gameId ,this.name ,this.phone ,this.code ,this.sex ,this.ageValue.value ,this.areaValue.value).then(
+      } else {
+        register(this.$route.params.id, this.gameId, this.name, this.phone, this.code, this.sex, this.ageValue.value, this.areaValue.value,this.password).then(
           data => {
             if (data.code == 200) {
               //注册成功
@@ -321,6 +351,12 @@ export default {
       font-size: rem(36);
       border-radius: 4px 4px 4px 4px;
     }
+  }
+  .description {
+    padding: rem(60) rem(0);
+    font-size: rem(24);
+    color: #666666;
+    line-height: 200%;
   }
 }
 </style>

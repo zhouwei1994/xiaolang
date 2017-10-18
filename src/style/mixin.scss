@@ -7,6 +7,64 @@ $fc:#fff;
 @function rem ($num) {
   @return $num/100 * 2rem;
 }
+//统计样式
+@mixin statistics() {
+	.incomeDisplay {
+    width: 100%;
+    display: flex;
+    background-color: #FFF;
+    .incomeType {
+      flex: 1;
+      text-align: center;
+      color: #333333;
+      font-size: rem(28);
+      border-left: 1px solid #ebebeb;
+      position: relative;
+      .child {
+        height: rem(88);
+        line-height: rem(88);
+      }
+      .child:first-child {
+        border-bottom: 1px solid #ebebeb;
+      }
+      .arrow {
+        position: absolute;
+        bottom: -0.6rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 0;
+        height: 0;
+        border-bottom: rem(22) solid #FFF;
+        border-left: rem(15) solid transparent;
+        border-right: rem(15) solid transparent;
+        display: none;
+      }
+      .details {
+        position: absolute;
+        top: calc(100% + 0.6rem);
+        width: calc(300% + 3px);
+        display: none;
+        left: -1px;
+      }
+      &:nth-child(2) {
+        .details {
+          left: calc(-100% - 2px);
+        }
+      }
+    }
+    .current {
+      >.child {
+        color: #f39800;
+      }
+      .details {
+        display: flex;
+      }
+      .arrow {
+        display: block;
+      }
+    }
+  }
+}
 // 背景图片地址和大小
 @mixin bis($url) {
 	background-image: url($url);

@@ -23,8 +23,8 @@ var anAgent = (id,pageNo,pageSize) => async('user/proxy/one/'+id,{
 //判断新老用户，登录
 var setLogIn = (code) => async('code/'+code,{});
 //注册
-var register = (openId,gameId ,username ,phone ,code ,sex ,age ,area) => async('/user/register',{
-  openId,gameId ,username ,phone ,code ,sex ,age ,area
+var register = (openId,gameId ,username ,phone ,code ,sex ,age ,area,password ) => async('/user/register',{
+  openId,gameId ,username ,phone ,code ,sex ,age ,area,password
 },'POST');
 //获取验证码
 var myCode = (phone) => async('user/code/'+phone,{});

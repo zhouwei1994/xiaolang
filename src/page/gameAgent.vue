@@ -69,46 +69,5 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import 'src/style/mixin';
-.gameAgentPage {
-  .gameAgentBox {
-    margin: rem(25);
-    background-color: #FFF;
-    padding: rem(42) rem(40);
-    .proxy {
-      display: flex;
-      margin-top: rem(124);
-      .selectIcon {
-        margin-right: rem(40);
-        i:after {
-          content: '\e632';
-          display: block;
-          font-size: rem(44);
-          color: #d5d5d5;
-        }
-      }
-      .current {
-        i:after {
-          content: '\e692';
-          color: #f39800;
-        }
-      }
-      .proxyText {
-        h2 {
-          font-size: rem(30);
-          color: #333333;
-          font-weight: bold;
-          margin-bottom: rem(30);
-        }
-        p {
-          font-size: rem(24);
-          color: #999999;
-          line-height: rem(40);
-        }
-      }
-      &:first-child {
-        margin-top: 0;
-      }
-    }
-  }
-}
+
 </style>

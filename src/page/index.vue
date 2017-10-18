@@ -6,17 +6,76 @@
         &#xe620;
       </div>
       <div class="userInfoBox">
-        <div class="userHeadBox">
-          <img :src="'http://'+userInfo.avater">
+        <div class="userHead">
+          <div class="userHeadBox">
+            <img :src="'http://'+userInfo.avater">
+          </div>
         </div>
         <p>{{userInfo.username}}</p>
+        <div class="level">游戏代理：二级代理</div>
+        <div class="level">创业推广大使：小灰灰</div>
       </div>
     </div>
+
+    <div class="statistics">
+      <div class="incomeDisplay">
+        <div class="incomeType" :class="{'current':incomeState == 1}" @click="incomeState = 1">
+          <div class="child">总收益</div>
+          <div class="child">500</div>
+          <div class="details incomeDisplay">
+            <div class="incomeType">
+              <div class="child">分享奖</div>
+              <div class="child">500</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">直接奖</div>
+              <div class="child">500</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">间接奖</div>
+              <div class="child">500</div>
+            </div>
+          </div>
+          <div class="arrow"></div>
+        </div>
+        <div class="incomeType" :class="{'current':incomeState == 2}" @click="incomeState = 2">
+          <div class="child">已提现</div>
+          <div class="child">500</div>
+          <div class="details incomeDisplay">
+            <div class="incomeType">
+              <div class="child">分享奖</div>
+              <div class="child">20</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">直接奖</div>
+              <div class="child">288</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">间接奖</div>
+              <div class="child">500</div>
+            </div>
+          </div>
+          <div class="arrow"></div>
+        </div>
+        <div class="incomeType" :class="{'current':incomeState == 3}" @click="incomeState = 3">
+          <div class="child">未提现</div>
+          <div class="child">500</div>
+        </div>
+      </div>
+    </div>
+
     <div class="featuresBox">
       <div class="featuresList" @click="$router.push('/income')">
         <div class="leftContent">
           <i class="icon_img_1"></i>
           <span>我的收益</span>
+        </div>
+        <div class="rightArrow icon">&#xe612;</div>
+      </div>
+      <div class="featuresList" @click="$router.push('/promotion')">
+        <div class="leftContent">
+          <i class="icon_img_8"></i>
+          <span>我的推广</span>
         </div>
         <div class="rightArrow icon">&#xe612;</div>
       </div>
@@ -41,24 +100,38 @@
         </div>
         <div class="rightArrow icon">&#xe612;</div>
       </div>
-      <div class="featuresList">
+      <div class="featuresList" @click="$router.push('/gameAgent/1')">
+        <div class="leftContent">
+          <i class="icon_img_6"></i>
+          <span>游戏代理申请</span>
+        </div>
+        <div class="rightArrow icon">&#xe612;</div>
+      </div>
+      <div class="featuresList" @click="$router.push('/create/1')">
+        <div class="leftContent">
+          <i class="icon_img_7"></i>
+          <span>创业推广大使</span>
+        </div>
+        <div class="rightArrow icon">&#xe612;</div>
+      </div>
+      <div class="featuresList" @click="$router.push('/chatWith')">
+        <div class="leftContent">
+          <i class="icon_img_9"></i>
+          <span>交友聊天</span>
+        </div>
+        <div class="rightArrow icon">&#xe612;</div>
+      </div>
+      <div class="featuresList" @click="$router.push('/medal')">
         <div class="leftContent">
           <i class="icon_img_5"></i>
           <span>小狼勋章</span>
         </div>
         <div class="rightArrow icon">&#xe612;</div>
       </div>
-      <div class="featuresList" v-if="userInfo.level < 3" @click="$router.push('/gameAgent/1')">
+      <div class="featuresList" @click="$router.push('/service')">
         <div class="leftContent">
-          <i class="icon_img_6"></i>
-          <span>一般游戏代理</span>
-        </div>
-        <div class="rightArrow icon">&#xe612;</div>
-      </div>
-      <div class="featuresList" v-if="userInfo.level < 4" @click="$router.push('/create/1')">
-        <div class="leftContent">
-          <i class="icon_img_7"></i>
-          <span>创业商家代理</span>
+          <i class="icon_img_10"></i>
+          <span>客服</span>
         </div>
         <div class="rightArrow icon">&#xe612;</div>
       </div>
@@ -70,7 +143,8 @@ import { getUserInfo } from '@/api/user'
 export default {
   data() {
     return {
-      userInfo:{}
+      incomeState: 1,
+      userInfo: {}
     }
   },
   methods: {
@@ -80,7 +154,7 @@ export default {
         data => {
           if (data.code == 200) {
             this.userInfo = data.data;
-          }else {
+          } else {
             this.prompt(data.msg);
           }
         }
@@ -89,9 +163,9 @@ export default {
   },
   mounted() {
     document.title = '个人中心';
-    if(this.$store.state.userInfo.userId){
+    if (this.$store.state.userInfo.userId) {
       this.pageData();
-    }else{
+    } else {
       this.$parent.judgment().then(
         () => {
           console.log(123);
@@ -106,10 +180,9 @@ export default {
 @import 'src/style/mixin';
 .myCenterPage {
   .myCenterHead {
-    background-image: linear-gradient(0deg,#ffb300 0%,#ffe88c 100%),
-    linear-gradient( #ffffff,#ffffff);
+    background-color: #ffffff;
     width: 100%;
-    height: rem(280);
+    height: rem(300);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,13 +199,17 @@ export default {
       right: rem(43);
       top: rem(40);
       font-size: rem(46);
-      color: #FFF;
+      color: #afa2a3;
     }
     .userInfoBox {
       text-align: center;
+      .userHead {
+        display: flex;
+        justify-content: center;
+      }
       .userHeadBox {
-        width: rem(144);
-        height: rem(144);
+        width: rem(136);
+        height: rem(136);
         border: 2px solid #FFF;
         border-radius: 50%;
         overflow: hidden;
@@ -144,12 +221,26 @@ export default {
       p {
         color: #333333;
         font-size: rem(28);
-        margin-top: rem(17);
+        margin-top: rem(10);
+        margin-bottom: rem(10);
+      }
+      .level {
+        color: #0e6aaf;
+        margin-top: rem(5);
+        font-size: rem(16);
       }
     }
   }
+
+  .statistics {
+    height: rem(422);
+    padding: rem(32) rem(45)  rem(10) rem(45);
+    @include statistics();
+  }
+
   .featuresBox {
     margin-top: rem(24);
+    margin-bottom: rem(100);
     .featuresList {
       height: rem(88);
       display: flex;
@@ -161,7 +252,7 @@ export default {
         display: flex;
         i {
           display: block;
-          width: rem(36);
+          width: rem(40);
           height: rem(36);
           background-position: center center;
           background-repeat: no-repeat;
@@ -194,6 +285,15 @@ export default {
         }
         .icon_img_7 {
           background-image: url(../images/me_icon_maker.png)
+        }
+        .icon_img_8 {
+          background-image: url(../images/me_icon_tuiguang.png)
+        }
+        .icon_img_9 {
+          background-image: url(../images/me_icon_jiaoyouliaot.png)
+        }
+        .icon_img_10 {
+          background-image: url(../images/me_icon_kefu.png)
         }
       }
       .rightArrow {

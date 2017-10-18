@@ -1,11 +1,23 @@
 <template>
   <div class="withdrawPage">
     <head-top>提现</head-top>
-    <div class="withdrawInfo">
-      <div class="local">
-        提现到
-        <span>微信钱包</span>
+    <div class="accountTitle">
+      请选择提现账号
+    </div>
+    <div class="account">
+      <div class="accountList">
+        <span>微信</span>
+        <i class="icon"></i>
       </div>
+      <div class="accountList current">
+        <span>支付宝</span>
+        <i class="icon"></i>
+      </div>
+      <div class="inputBox">
+        <input type="text" placeholder="请输入支付宝账号">
+      </div>
+    </div>
+    <div class="withdrawInfo">
       <div class="withdrawDescription">
         提现金额
       </div>
@@ -103,20 +115,52 @@ export default {
 <style lang="scss" scoped>
 @import 'src/style/mixin';
 .withdrawPage {
-  .withdrawInfo {
-    margin: rem(26);
-    padding: rem(30);
+  .accountTitle {
+    padding: rem(28) rem(51) rem(14) rem(51);
+    color: #333333;
+    font-size: rem(30);
+  }
+  .account {
+    margin: 0px rem(21);
+    padding: rem(20) rem(29);
     background-color: #FFF;
-    .local {
-      font-size: rem(30);
-      color: #333333;
+    border-radius: rem(5);
+
+    .accountList {
+      display: flex;
+      justify-content: space-between;
+      padding: rem(20) 0;
       span {
-        margin-left: rem(40);
+        color: #333333;
+        font-size: rem(30);
+      }
+      i:after {
+        content: '\e632';
+        display: block;
+        font-size: rem(44);
+        color: #d5d5d5;
+      }
+    }
+    .current {
+      i:after {
+        content: '\e692';
         color: #f39800;
       }
     }
+    .inputBox {
+      border-bottom: 1px solid #dadada;
+      input {
+        height: rem(80);
+        line-height: rem(80);
+      }
+    }
+  }
+  .withdrawInfo {
+    margin: rem(26);
+    padding: rem(30);
+    border-radius: rem(5);
+    background-color: #FFF;
     .withdrawDescription {
-      margin-top: rem(60);
       font-size: rem(30);
       color: #333333;
     }

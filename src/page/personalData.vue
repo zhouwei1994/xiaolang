@@ -31,10 +31,10 @@
           请选择
         </div>
       </div>
-      <div class="infoBox active" @click="$router.push('/verifyPhone')">
+      <div class="infoBox active" @click="$router.push('/verifyPhone/'+userInfo.phone)">
         <label>手机号</label>
         <div class="select">
-          {{userInfo.phone}}
+          {{userInfo.phone}}<i class="icon">&#xe612;</i>
         </div>
       </div>
       <div class="infoBox active" @click="areaBoxState = true">
@@ -44,6 +44,12 @@
         </div>
         <div class="select" v-else>
           请选择
+        </div>
+      </div>
+      <div class="infoBox active" @click="$router.push('/modifyPas/'+userInfo.phone)">
+        <label>修改提现密码</label>
+        <div class="select">
+          <i class="icon">&#xe612;</i>
         </div>
       </div>
     </div>
@@ -214,7 +220,4 @@ export default {
 </script>
 <style lang="scss" scoped>
 @import 'src/style/mixin';
-.personalDataPage {
-  @import 'src/style/personal';
-}
 </style>
