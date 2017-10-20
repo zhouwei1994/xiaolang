@@ -35,16 +35,14 @@
       </div>
     </div>
     <div class="publicBut">
-      <button @click="getWithdraw">提交</button>
+      <button @click="windowState = true">提交</button>
     </div>
     <div class="description">
       <p>提现奖金说明：</p>
-      <p>1.成功申请成为创业商家代理，才能提现奖金。</p>
-      <p>2.每推荐成功1个创业商家代理，才能取出10个分享奖励的现金。</p>
-      <p>3.提现申请后，第二日到账微信零钱。</p>
+      <p v-for="(item,index) of info[2]">{{index+1}}.{{item}}</p>
     </div>
-    <div class="mask"></div>
-    <div class="withdrawWindow">
+    <div class="mask" v-show="windowState"></div>
+    <div class="withdrawWindow" v-show="windowState">
       <div class="title">
         提现密码
       </div>
@@ -52,20 +50,22 @@
         <input type="password" placeholder="请输入提现密码">
       </div>
       <div class="operating">
-        <button>取消</button>
-        <button>确定</button>
+        <button @click="windowState = false">取消</button>
+        <button @click="getWithdraw">确定</button>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { canBeRaisedApi, withdrawApi } from '@/api/user'
+import { canBeRaisedApi, withdrawApi,setDescription } from '@/api/user'
 export default {
   data() {
     return {
       withdraw: '',
       canBeRaised: 0,
-      colse: false
+      colse: false,
+      windowState:false,
+      info:''
     }
   },
   watch: {
@@ -91,6 +91,15 @@ export default {
           if (data.code == 200) {
             this.canBeRaised = data.data;
           } else {
+            this.prompt(data.msg);
+          }
+        }
+      );
+      setDescription(4444).then(
+        data => {
+          if(data.code == 200){
+            this.info = data.data;
+          }else{
             this.prompt(data.msg);
           }
         }
@@ -271,7 +280,6 @@ export default {
     button:last-child {
       color: #f39800;
     }
-
   }
 }
 </style>

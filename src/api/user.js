@@ -48,6 +48,10 @@ var setQrcode = () => async('common/qrcode',{});
 var setGoodsList = (type,pageNo,pageSize) => async('common/product/'+type,{
   pageNo,pageSize
 });
+//商家详情
+var setGoodsInfo = (id) => async('common/product/details/' + id,{});
+//说明
+var setDescription = (key) => async('common/memo/' + key,{});
 export {
   getUserInfo,
   modifyUserInfo,
@@ -65,5 +69,7 @@ export {
   revenueObvious,
   setSuperior,
   setQrcode,
-  setGoodsList
+  setGoodsList,
+  setGoodsInfo,
+  setDescription
 }

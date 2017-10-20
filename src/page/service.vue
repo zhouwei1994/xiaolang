@@ -2,16 +2,36 @@
   <div class="servicePage">
     <head-top>客服</head-top>
     <div class="serviceBox">
-      <div class="serviceList">
-        客服1QQ：3982737464
+      <div class="serviceList" v-for="(item,index) of info[2]">
+        {{item}}
       </div>
     </div>
   </div>
 </template>
 <script>
+import {setDescription} from '@/api/user'
 export default {
+  data(){
+    return {
+      info:[]
+    }
+  },
+  methods:{
+    pageData(){
+      setDescription(8888).then(
+        data => {
+          if(data.code == 200){
+            this.info = data.data;
+          }else{
+            this.prompt(data.msg);
+          }
+        }
+      );
+    }
+  },
   mounted() {
     document.title = '客服';
+    this.pageData();
   }
 }
 </script>

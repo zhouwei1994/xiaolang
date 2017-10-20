@@ -10,9 +10,9 @@
       </div>
       <div class="msg">
         <div>{{agentInfo.notRegister}}</div>
-        <div>{{agentInfo.notRegister}}</div>
         <div>{{agentInfo.register}}</div>
-        <div>{{agentInfo.gameProxy}}</div>
+        <div>{{agentInfo.twoProxy}}</div>
+        <div>{{agentInfo.threeProxy}}</div>
       </div>
     </div>
     <div class="coyotesInfo">

@@ -2,27 +2,13 @@
   <div class="gameAgentPage">
     <head-top v-if="$route.params.state == 1">一般游戏代理</head-top>
     <div class="gameAgentBox">
-      <div class="proxy">
-        <div class="selectIcon" :class="{'current':type == 2}" @click="type = 2">
+      <div class="proxy" v-for="(item,index) of info">
+        <div class="selectIcon" :class="{'current':type == index}" @click="type = index">
           <i class="icon"></i>
         </div>
         <div class="proxyText">
           <h2>二级代理（268元）</h2>
-          <p>1.送268元面值的卡五星游戏金钻。</p>
-          <p>2.绑定邀请码的下级用户购买金钻时，享其购买金额40%的返现。</p>
-          <p>3.可以发展三级代理，享三级代理用户购买卡五星金钻金额10%的返现。</p>
-          <p>4.获得小狼人勋章，具有线下合作商家的消费优惠价</p>
-        </div>
-      </div>
-      <div class="proxy">
-        <div class="selectIcon" :class="{'current':type == 3}" @click="type = 3">
-          <i class="icon"></i>
-        </div>
-        <div class="proxyText">
-          <h2>三级代理（88元）</h2>
-          <p>1.送88元面值的卡五星游戏金钻。</p>
-          <p>2.绑定邀请码的下级用户购买金钻时，享其购买金额30%的返现。</p>
-          <p>3.获得小狼人勋章，具有线下合作商家的消费优惠价。</p>
+          <p v-for="(childItem,childIndex) of item">{{childIndex+1}}.{{childItem}}</p>
         </div>
       </div>
     </div>
@@ -33,10 +19,12 @@
 </template>
 <script>
 import {wxPay} from '@/api/wxPay';
+import {setDescription} from '@/api/user'
 export default {
   data () {
     return {
-      type:2
+      type:2,
+      info:{}
     }
   },
   methods: {
@@ -55,10 +43,22 @@ export default {
       }else{
         this.prompt('请选择代理级别');
       }
+    },
+    pageData(){
+      setDescription(22).then(
+        data => {
+          if(data.code == 200){
+            this.info = data.data;
+          }else{
+            this.prompt(data.msg);
+          }
+        }
+      );
     }
   },
   mounted() {
     document.title = '一般游戏代理';
+    this.pageData();
     if(!this.$store.state.userInfo.userId){
       this.$parent.judgment().then(
         () => {
