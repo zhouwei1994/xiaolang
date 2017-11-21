@@ -51,6 +51,11 @@ $fc:#fff;
           left: calc(-100% - 2px);
         }
       }
+      &:nth-child(3) {
+        .details {
+          left: calc(-200% - 3px);
+        }
+      }
     }
     .current {
       >.child {

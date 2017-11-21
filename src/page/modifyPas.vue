@@ -11,24 +11,93 @@
       <div class="inputBox">
         <label>验证码</label>
         <div>
-          <input type="text" placeholder="请输入验证码">
-          <button>发送验证码</button>
+          <input type="text" placeholder="请输入验证码" v-model="code">
+          <button @click="setCode">{{codeText}}</button>
         </div>
       </div>
       <div class="inputBox">
         <label>新密码</label>
         <div>
-          <input type="password" placeholder="请输入密码">
+          <input type="password" placeholder="请输入密码" v-model="pwd">
         </div>
       </div>
     </div>
     <div class="publicBut">
-      <button>提交</button>
+      <button @click="modifypas">提交</button>
     </div>
   </div>
 </template>
 <script>
+import { myCode,withdrawPas } from '@/api/user'
+var clear;
 export default {
+  data(){
+    return {
+      //发送验证码文字
+      codeText: '获取验证码',
+      readonly: false,
+      code:'',
+      pwd:''
+    }
+  },
+  methods:{
+    getCodeState() {
+      const _this = this;
+      this.readonly = true;
+      this.codeText = '60S后重新获取';
+      var s = 60;
+      clear = setInterval(() => {
+        s--;
+        _this.codeText = s + 'S后重新获取';
+        if (s == 0) {
+          clearInterval(clear);
+          _this.codeText = "获取验证码";
+          _this.readonly = false;
+        }
+      }, 1000);
+    },
+    //获取验证码
+    setCode() {
+      var _this = this;
+      if (_this.readonly) {
+        this.prompt('验证码已发送');
+      } else if (this.$route.params.phone && !/^[1][3,4,5,7,8][0-9]{9}$/.test(this.$route.params.phone)) {
+        this.prompt('获取手机号失败，请重新尝试');
+      } else {
+        myCode(_this.$route.params.phone).then(
+          data => {
+            if (data.code == 200) {
+              _this.getCodeState();
+            } else {
+              _this.prompt(data.msg);
+            }
+          }
+        )
+      }
+    },
+    modifypas() {
+      var _this = this;
+      if (!this.$route.params.phone && !/^[1][3,4,5,7,8][0-9]{9}$/.test(this.phone)) {
+        this.prompt('获取手机号失败，请重新尝试');
+      } else if (this.oldCode == ''){
+        this.prompt('请输入验证码');
+      } else if (this.pwd == ''){
+        this.prompt('请输入新密码');
+      } else if (!/^[0-9]{6}$/.test(this.pwd)){
+        this.prompt('提现密码由6位数字组成');
+      } else {
+        withdrawPas(this.code, this.pwd).then(
+          data => {
+            if (data.code == 200) {
+              _this.$router.push('/personalData');
+            } else {
+              _this.prompt(data.msg);
+            }
+          }
+        );
+      }
+    },
+  },
   mounted() {
     document.title = '修改提现密码';
   }

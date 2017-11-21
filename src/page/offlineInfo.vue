@@ -56,7 +56,7 @@
     <div class="offlineUserBox" v-load-more="loaderMore" type="1">
       <div class="userList" v-for="(item,index) of agentList">
         <div class="userImg">
-          <img :src="'http://'+item.avatar">
+          <img :src="'http://'+item.avater">
         </div>
         <div class="userText">
           <h2>{{item.openName}}</h2>

@@ -3,7 +3,7 @@
     <head-top>我的收益</head-top>
     <div class="incomeBox">
       <div class="rule">
-        <span>说明规则</span>
+        <!-- <span>说明规则</span> -->
       </div>
       <div class="incomeDisplay">
         <div class="incomeType" :class="{'current':incomeState == 1}" @click="incomeState = 1">
@@ -47,6 +47,21 @@
         <div class="incomeType" :class="{'current':incomeState == 3}" @click="incomeState = 3">
           <div class="child">未提现</div>
           <div class="child">{{incomeInfo.notDraw}}</div>
+          <div class="details incomeDisplay">
+            <div class="incomeType">
+              <div class="child">分享奖</div>
+              <div class="child">{{incomeInfo.unShare}}</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">直接奖</div>
+              <div class="child">{{incomeInfo.unDirective}}</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">间接奖</div>
+              <div class="child">{{incomeInfo.unIindirective}}</div>
+            </div>
+          </div>
+          <div class="arrow"></div>
         </div>
       </div>
       <div class="withdraw" @click="$router.push('/withdraw')">
@@ -72,47 +87,48 @@
   </div>
 </template>
 <script>
-import { getFlowingWater, revenueObvious } from '@/api/user'
-import { loadMore } from '@/components/common/mixin'
+import { getFlowingWater, revenueObvious } from "@/api/user";
+import { loadMore } from "@/components/common/mixin";
 export default {
   data() {
     return {
       incomeState: 1,
       incomeInfo: {
-        "totalIncome": '--',
-        "hasDraw": '--',
-        "notDraw": '--',
-        "shareAward": '--',
-        "directiveAward": '--',
-        "indirectiveAward": '--',
-        "share": '--',
-        "directive": '--',
-        "indirective": '--'
+        totalIncome: "--",
+        hasDraw: "--",
+        notDraw: "--",
+        shareAward: "--",
+        directiveAward: "--",
+        indirectiveAward: "--",
+        share: "--",
+        directive: "--",
+        indirective: "--",
+        unDirective:"--",
+        unIindirective:"--",
+        unShare:"--"
       },
       waterList: [],
       pageNo: 1,
       pageSize: 7,
       preventRepeatReuqest: false
-    }
+    };
   },
   mixins: [loadMore],
   methods: {
     //页面数据
     pageData() {
-      revenueObvious().then(
-        data => {
-          if (data.code == 200) {
-            this.incomeInfo = data.data;
-          } else {
-            this.prompt(data.msg);
-          }
+      revenueObvious().then(data => {
+        if (data.code == 200) {
+          this.incomeInfo = data.data;
+        } else {
+          this.prompt(data.msg);
         }
-      );
+      });
     },
     //到达底部加载更多数据
     loaderMore() {
       if (this.preventRepeatReuqest) {
-        return
+        return;
       }
       this.preventRepeatReuqest = true;
       getFlowingWater(this.pageNo, this.pageSize).then(
@@ -140,25 +156,27 @@ export default {
     }
   },
   mounted() {
-    document.title = '我的收益';
+    document.title = "我的收益";
     if (this.$store.state.userInfo.userId) {
       this.pageData();
       this.loaderMore();
     } else {
-      this.$router.push('/registered/0');
+      this.$router.push("/registered/0");
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-@import 'src/style/mixin';
+@import "src/style/mixin";
 .incomePage {
   .incomeBox {
     background-image: linear-gradient(141deg, #50e1ff 0%, #4daefe 100%),
-    linear-gradient( #ffffff, #ffffff);
+      linear-gradient(#ffffff, #ffffff);
     padding: 0 rem(45);
+    // height: rem(350);
     height: rem(550);
     position: relative;
+    @include statistics();
     .rule {
       padding: rem(24) 0;
       display: flex;
@@ -168,61 +186,7 @@ export default {
         color: #fefefe;
       }
     }
-    .incomeDisplay {
-      width: 100%;
-      display: flex;
-      background-color: #FFF;
-      .incomeType {
-        flex: 1;
-        text-align: center;
-        color: #333333;
-        font-size: rem(28);
-        border-left: 1px solid #ebebeb;
-        position: relative;
-        .child {
-          height: rem(88);
-          line-height: rem(88);
-        }
-        .child:first-child {
-          border-bottom: 1px solid #ebebeb;
-        }
-        .arrow {
-          position: absolute;
-          bottom: -0.6rem;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 0;
-          height: 0;
-          border-bottom: rem(22) solid #FFF;
-          border-left: rem(15) solid transparent;
-          border-right: rem(15) solid transparent;
-          display: none;
-        }
-        .details {
-          position: absolute;
-          top: calc(100% + 0.6rem);
-          width: calc(300% + 3px);
-          display: none;
-          left: -1px;
-        }
-        &:nth-child(2) {
-          .details {
-            left: calc(-100% - 2px);
-          }
-        }
-      }
-      .current {
-        >.child {
-          color: #f39800;
-        }
-        .details {
-          display: flex;
-        }
-        .arrow {
-          display: block;
-        }
-      }
-    }
+
     .withdraw {
       position: absolute;
       left: 50%;
@@ -244,7 +208,7 @@ export default {
     color: #333333;
   }
   .expenditureBox {
-    background-color: #FFF;
+    background-color: #fff;
     padding: 0 rem(30);
     .expenditureList {
       display: flex;

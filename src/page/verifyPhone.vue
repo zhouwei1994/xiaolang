@@ -205,6 +205,7 @@ export default {
     input {
       width: 100%;
       padding-right: rem(20);
+      font-size: rem(32);
     }
     button {
       flex-shrink: 0;

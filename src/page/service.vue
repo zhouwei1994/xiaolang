@@ -2,7 +2,7 @@
   <div class="servicePage">
     <head-top>客服</head-top>
     <div class="serviceBox">
-      <div class="serviceList" v-for="(item,index) of info[2]">
+      <div class="serviceList" v-for="(item,index) of info[0].list">
         {{item}}
       </div>
     </div>
@@ -13,7 +13,7 @@ import {setDescription} from '@/api/user'
 export default {
   data(){
     return {
-      info:[]
+      info:[{list:[]}]
     }
   },
   methods:{

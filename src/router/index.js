@@ -37,8 +37,8 @@ const routes = [
   },
   //我的小狼
   {
-    path: '/coyotes',
-    name: 'coyotes',
+    path: '/myCoyotes',
+    name: 'myCoyotes',
     component: resolve => require(['@/page/coyotes.vue'], resolve)
   },
   //我的小狼
@@ -107,7 +107,35 @@ const routes = [
     name: 'modifyPas',
     component: resolve => require(['@/page/modifyPas.vue'], resolve)
   },
-];
+  //用户反馈
+  {
+    path: '/feedback',
+    name: 'feedback',
+    component: resolve => require(['@/page/feedback.vue'], resolve)
+  },
+  //商城列表
+  {
+    path: '/goodsHome',
+    name: 'modifyPas',
+    component: resolve => require(['@/page/goods/goodsList.vue'], resolve)
+  },
+  //商城商品详情
+  {
+    path: '/goodsInfo/1',
+    name: 'goodsDetails',
+    component: resolve => require(['@/page/goods/goodsDetails.vue'], resolve)
+  },
+  {
+    path: '/goodsInfo/2',
+    name: 'goodsDetails',
+    component: resolve => require(['@/page/goods/goodsDetails2.vue'], resolve)
+  },
+  {
+    path: '/goodsInfo/3',
+    name: 'goodsDetails',
+    component: resolve => require(['@/page/goods/goodsDetails3.vue'], resolve)
+  },
+]; 
 let router = new Router({
   //模式
   mode: routerMode,

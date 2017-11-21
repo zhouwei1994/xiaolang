@@ -11,9 +11,10 @@ let baseUrl = '';
 let routerMode = 'history';
 let imgBaseUrl = 'http://images.cangdu.org/';
 if (process.env.NODE_ENV == 'development') {
-  baseUrl = 'http://xiaolang.jczsz.cn/wolf/'
+	baseUrl = 'http://xiaolang.jczsz.cn/wolf/';
 }else if(process.env.NODE_ENV == 'production'){
-  baseUrl = 'http://xiaolang.jczsz.cn/wolf/'
+	baseUrl = 'http://xiaolang.jczsz.cn/wolf/';
+	routerMode = 'hash';
 }
 
 export {

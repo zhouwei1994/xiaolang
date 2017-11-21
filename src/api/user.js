@@ -17,13 +17,13 @@ var getFlowingWater = (pageNo,pageSize) => async('user/bills/'+store.state.userI
 //获取代理统计
 var getAgentStatistics = () => async('user/proxy/'+store.state.userInfo.userId,{});
 //获取一级代理
-var anAgent = (id,pageNo,pageSize) => async('user/proxy/one/'+id,{
+var anAgent = (id, pageNo, pageSize) => async('user/proxy/two/'+id,{
   pageNo,pageSize
 });
 //判断新老用户，登录
 var setLogIn = (code) => async('code/'+code,{});
 //注册
-var register = (openId,gameId ,username ,phone ,code ,sex ,age ,area,password ) => async('/user/register',{
+var register = (openId,gameId ,username ,phone ,code ,sex ,age ,area,password ) => async('user/register',{
   openId,gameId ,username ,phone ,code ,sex ,age ,area,password
 },'POST');
 //获取验证码
@@ -35,8 +35,8 @@ var newphoneApi = (phone,code) => async('user/phone/'+store.state.userInfo.userI
 //获取可提现金额
 var canBeRaisedApi = () => async('user/allow/'+store.state.userInfo.userId,{});
 //提现
-var withdrawApi = (amount,openId = store.state.userInfo.openId) => async('user/withdraw',{
-  amount,openId
+var withdrawApi = (amount, password, phone, type, userId = store.state.userInfo.userId ) => async('user/withdraw',{
+  amount, password, phone, type, userId
 });
 //收益明显
 var revenueObvious = () => async('user/wallet/'+store.state.userInfo.userId,{});
@@ -52,6 +52,22 @@ var setGoodsList = (type,pageNo,pageSize) => async('common/product/'+type,{
 var setGoodsInfo = (id) => async('common/product/details/' + id,{});
 //说明
 var setDescription = (key) => async('common/memo/' + key,{});
+//修改提现密码
+var withdrawPas = (code, pwd, userId = store.state.userInfo.userId) => async('user/updatePwd', {
+  code, pwd, userId
+},'POST');
+//我的推广
+var getMyPromotion = () => async('user/qr/' + store.state.userInfo.userId, {});
+//问题反馈
+var getFeedback = (content, uid = store.state.userInfo.userId) => async('common/feedback', { content, uid }, 'POST');
+//储存银行卡号
+var bindBank = (bankUser, bankType, bankAccount, uid = store.state.userInfo.userId) => async('common/addBank',
+  { bankUser, bankType, bankAccount, uid },
+  'POST');
+//获取银行卡号
+var getBank = (uid = store.state.userInfo.userId) => async('common/findBank/' + uid, {});
+//获取提现费率
+var getRatio = () => async('common/ratio', {});
 export {
   getUserInfo,
   modifyUserInfo,
@@ -71,5 +87,11 @@ export {
   setQrcode,
   setGoodsList,
   setGoodsInfo,
-  setDescription
+  setDescription,
+  withdrawPas,
+  getMyPromotion,
+  getFeedback,
+  bindBank,
+  getBank,
+  getRatio
 }

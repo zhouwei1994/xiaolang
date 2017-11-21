@@ -19,7 +19,7 @@
         <div class="level" v-if="userInfo.wolfLevel == 0">创业推广大使：非创业推广大使</div>
         <div class="level" v-if="userInfo.wolfLevel == 4">创业推广大使：小灰灰</div>
         <div class="level" v-if="userInfo.wolfLevel == 5">创业推广大使：灰太狼</div>
-        <div class="level" v-if="userInfo.wolfLevel == 6">创业推广大使：红太狼</div>
+        <div class="level" v-if="userInfo.wolfLevel == 6">创业推广大使：红太狼</div> 
       </div>
     </div>
 
@@ -66,6 +66,21 @@
         <div class="incomeType" :class="{'current':incomeState == 3}" @click="incomeState = 3">
           <div class="child">未提现</div>
           <div class="child">{{incomeInfo.notDraw}}</div>
+          <div class="details incomeDisplay">
+            <div class="incomeType">
+              <div class="child">分享奖</div>
+              <div class="child">{{incomeInfo.unShare}}</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">直接奖</div>
+              <div class="child">{{incomeInfo.unDirective}}</div>
+            </div>
+            <div class="incomeType">
+              <div class="child">间接奖</div>
+              <div class="child">{{incomeInfo.unIindirective}}</div>
+            </div>
+          </div>
+          <div class="arrow"></div>
         </div>
       </div>
     </div>
@@ -77,22 +92,22 @@
           <span>我的收益</span>
         </div>
         <div class="rightArrow icon">&#xe612;</div>
-      </div>
-      <div class="featuresList" @click="$router.push('/promotion')">
+      </div> 
+       <div class="featuresList" @click="$router.push('/promotion')">
         <div class="leftContent">
           <i class="icon_img_8"></i>
           <span>我的推广</span>
         </div>
         <div class="rightArrow icon">&#xe612;</div>
       </div>
-      <div class="featuresList" @click="$router.push('/coyotes')">
+      <div class="featuresList" @click="$router.push('/myCoyotes')">
         <div class="leftContent">
           <i class="icon_img_2"></i>
           <span>我的小狼</span>
         </div>
         <div class="rightArrow icon">&#xe612;</div>
       </div>
-      <div class="featuresList">
+      <div class="featuresList" @click="jump('https://h5.youzan.com/v2/goods/3np6pu783e5ut?reft=1508902912477&spm=f46859147&sf=wx_sm&from=singlemessage&isappinstalled=0')">
         <div class="leftContent">
           <i class="icon_img_3"></i>
           <span>代理商城</span>
@@ -141,6 +156,13 @@
         </div>
         <div class="rightArrow icon">&#xe612;</div>
       </div>
+      <div class="featuresList" @click="$router.push('/feedback')">
+        <div class="leftContent">
+          <i class="icon_img_11"></i>
+          <span>投诉建议</span>
+        </div>
+        <div class="rightArrow icon">&#xe612;</div>
+      </div>
     </div>
   </div>
 </template>
@@ -160,7 +182,10 @@ export default {
         "indirectiveAward": '--',
         "share": '--',
         "directive": '--',
-        "indirective": '--'
+        "indirective": '--',
+        "unDirective":"--",
+        "unIindirective":"--",
+        "unShare":"--"
       }
     }
   },
@@ -186,6 +211,9 @@ export default {
         }
       );
     },
+    jump(url){
+      window.location.href = url;
+    }
   },
   mounted() {
     document.title = '个人中心';
@@ -260,6 +288,7 @@ export default {
 
   .statistics {
     height: rem(422);
+    // height: rem(215);
     padding: rem(32) rem(45)  rem(10) rem(45);
     @include statistics();
   }
@@ -320,6 +349,9 @@ export default {
         }
         .icon_img_10 {
           background-image: url(../images/me_icon_kefu.png)
+        }
+        .icon_img_11 {
+          background-image: url(../images/fankui.png);
         }
       }
       .rightArrow {

@@ -2,19 +2,17 @@
   <div class="withdrawPage">
     <head-top>提现</head-top>
     <div class="accountTitle">
-      请选择提现账号
+      请填写银行卡信息
     </div>
     <div class="account">
-      <div class="accountList">
-        <span>微信</span>
-        <i class="icon"></i>
-      </div>
-      <div class="accountList current">
-        <span>支付宝</span>
-        <i class="icon"></i>
+      <div class="inputBox">
+        <input type="text" placeholder="请输入开户名" v-model="bankUser">
       </div>
       <div class="inputBox">
-        <input type="text" placeholder="请输入支付宝账号">
+        <input type="text" placeholder="请输入开户行" v-model="bankType">
+      </div>
+      <div class="inputBox">
+        <input type="number" placeholder="请输入银行卡账号" v-model="bankAccount">
       </div>
     </div>
     <div class="withdrawInfo">
@@ -31,15 +29,15 @@
         </div>
       </div>
       <div class="totalAmount">
-        可提现金额：￥{{canBeRaised | decimal}}
+        可提现金额：￥{{canBeRaised | decimal}}，费率：{{ratio}}
       </div>
     </div>
     <div class="publicBut">
-      <button @click="windowState = true">提交</button>
+      <button @click="submit">提交</button>
     </div>
     <div class="description">
-      <p>提现奖金说明：</p>
-      <p v-for="(item,index) of info[2]">{{index+1}}.{{item}}</p>
+      <p>提现说明：</p>
+      <p v-for="(item,index) of info[0].list">{{item}}</p>
     </div>
     <div class="mask" v-show="windowState"></div>
     <div class="withdrawWindow" v-show="windowState">
@@ -47,7 +45,7 @@
         提现密码
       </div>
       <div class="content">
-        <input type="password" placeholder="请输入提现密码">
+        <input type="password" placeholder="请输入提现密码" v-model="password">
       </div>
       <div class="operating">
         <button @click="windowState = false">取消</button>
@@ -57,27 +55,30 @@
   </div>
 </template>
 <script>
-import { canBeRaisedApi, withdrawApi,setDescription } from '@/api/user'
+import { canBeRaisedApi, withdrawApi, setDescription,bindBank,getBank,getRatio } from "@/api/user";
 export default {
   data() {
     return {
-      withdraw: '',
-      canBeRaised: 0,
+      withdraw: "",
+      bankUser:'',
+      bankType:'',
+      bankAccount:'',
+      canBeRaised:'',
+      password:"",
+      bankId:'',
       colse: false,
-      windowState:false,
-      info:''
-    }
+      windowState: false,
+      info: [{ list: [] }],
+      ratio:0
+    };
   },
   watch: {
     withdraw(val) {
-      var value = parseFloat(val);
-      if (value === 0 || value.toString() === 'NaN') {
-        this.withdraw = '';
-        this.colse = false;
-      } else if (value < 0) {
+      var value = val.replace(/[^0-9.]/g,'');
+      if (value < 0) {
         this.withdraw = Math.abs(value);
         this.colse = true;
-      } else {
+      }else {
         this.withdraw = value;
         this.colse = true;
       }
@@ -86,56 +87,92 @@ export default {
   methods: {
     //获取可提现金额
     setCanBeRaised() {
-      canBeRaisedApi().then(
-        data => {
+      canBeRaisedApi().then(data => {
+        if (data.code == 200) {
+          this.canBeRaised = data.data;
+        } else {
+          this.prompt(data.msg);
+        }
+      });
+      setDescription(4444).then(data => {
+        if (data.code == 200) {
+          this.info = data.data;
+        } else {
+          this.prompt(data.msg);
+        }
+      });
+      getBank().then(data => {
+        if (data.code == 200) {
+          this.bankUser = data.data.bankUser ? data.data.bankUser : '';
+          this.bankType = data.data.bankType ? data.data.bankType : '';
+          this.bankAccount = data.data.bankAccount ? data.data.bankAccount : '';
+        }
+      });
+      getRatio().then(data => {
+        if (data.code == 200) {
+          this.ratio = data.data;
+        }else{
+          this.prompt(data.msg);
+        }
+      });
+    },
+    submit(){
+      if(this.bankUser == ''){
+        this.prompt('请输入开户名');
+      }else if(this.bankType == ''){
+        this.prompt('请输入开户行');
+      }else if(this.bankType == ''){
+        this.prompt('请输入银行账号');
+      }else if (this.withdraw == "") {
+        this.prompt("请输入提现金额");
+      } else if (parseFloat(this.withdraw) > parseFloat(this.canBeRaised)) {
+        this.prompt("超出可提现金额");
+      }else{
+        bindBank(this.bankUser,this.bankType,this.bankAccount).then(data => {
           if (data.code == 200) {
-            this.canBeRaised = data.data;
+            this.bankId = data.data;
+            this.windowState = true;
           } else {
             this.prompt(data.msg);
           }
-        }
-      );
-      setDescription(4444).then(
-        data => {
-          if(data.code == 200){
-            this.info = data.data;
-          }else{
-            this.prompt(data.msg);
-          }
-        }
-      );
+        });
+      }
     },
     //提现
     getWithdraw() {
-      if (this.withdraw == '') {
-        this.prompt('请输入提现金额');
-      } else if (parseFloat(this.withdraw) > parseFloat(this.canBeRaised)) {
-        this.prompt('超出可提现金额');
-      } else {
-        withdrawApi(this.withdraw).then(
-          data => {
-            if (data.code == 200) {
-              this.prompt('申请提现成功！');
-            } else {
-              this.prompt(data.msg);
-            }
+      if (this.password == "") {
+        this.prompt("请输入提现密码");
+      }else {
+        withdrawApi(this.withdraw,this.bankId,this.password ,3).then(data => {
+          if (data.code == 200) {
+            this.prompt("申请提现成功！");
+            this.windowState = false;
+            this.$router.push('/income');
+          } else {
+            this.prompt(data.msg);
           }
-        );
+        });
       }
     }
   },
   mounted() {
-    document.title = '提现';
+    document.title = "提现";
     if (this.$store.state.userInfo.userId) {
       this.setCanBeRaised();
-    } else {
-      this.$router.push('/registered/0');
+    } else if(this.$store.state.userInfoState){
+      this.$parent.judgment().then(data => {
+        if(data){
+          this.setCanBeRaised();
+        }else{
+          this.$router.push('/registered');
+        }
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
-@import 'src/style/mixin';
+@import "src/style/mixin";
 .withdrawPage {
   .accountTitle {
     padding: rem(28) rem(51) rem(14) rem(51);
@@ -145,7 +182,7 @@ export default {
   .account {
     margin: 0px rem(21);
     padding: rem(20) rem(29);
-    background-color: #FFF;
+    background-color: #fff;
     border-radius: rem(5);
 
     .accountList {
@@ -157,7 +194,7 @@ export default {
         font-size: rem(30);
       }
       i:after {
-        content: '\e632';
+        content: "\e632";
         display: block;
         font-size: rem(44);
         color: #d5d5d5;
@@ -165,13 +202,14 @@ export default {
     }
     .current {
       i:after {
-        content: '\e692';
+        content: "\e692";
         color: #f39800;
       }
     }
     .inputBox {
       border-bottom: 1px solid #dadada;
       input {
+        width: 100%;
         height: rem(80);
         line-height: rem(80);
       }
@@ -181,7 +219,7 @@ export default {
     margin: rem(26);
     padding: rem(30);
     border-radius: rem(5);
-    background-color: #FFF;
+    background-color: #fff;
     .withdrawDescription {
       font-size: rem(30);
       color: #333333;
@@ -234,14 +272,14 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 100;
 }
 .withdrawWindow {
   position: fixed;
   top: 50%;
   left: 50%;
-  background-color: #FFF;
+  background-color: #fff;
   z-index: 101;
   transform: translateX(-50%) translateY(-50%);
   width: 90%;

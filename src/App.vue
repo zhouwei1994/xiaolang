@@ -4,16 +4,20 @@
     <transition :name="'pop-' + (direction === 'forward' ? 'in' : 'out')">
       <router-view class="router-view"></router-view>
     </transition>
+    <!-- <foot-guide></foot-guide> -->
     <loading :value="pageLoading || dataLoading"></loading>
   </div>
 </template>
 <script>
 import { mapState, mapMutations } from 'vuex'
 import headTop from '@/components/header/head'
+import footGuide from '@/components/footer/footGuide'
 import loading from '@/components/common/loading'
+import { setLogIn } from '@/api/user'
 export default {
   components:{
     headTop,
+    footGuide,
     loading
   },
   data () {
@@ -52,18 +56,23 @@ export default {
       return theRequest;
     },
     //判断新老用户，登录
-    judgment() {
+    judgment(state) {
       return new Promise((resolve, reject) => {
         const code = this.getRequest().code;
         if (code) {
           setLogIn(code).then(
             data => {
               if (data.code == 200) {
+                console.log(data.data);
                 if (data.data.register) {
                   this.setUserInfo(data.data);
                   resolve();
                 } else {
-                  this.$router.push('/registered/' + data.data.openId);
+                  if(state){
+                    reject(data.data.openId);
+                  }else{
+                    this.$router.push('/registered/' + data.data.openId);
+                  }
                 }
               } else {
                 this.$router.push('/registered/' + 0);

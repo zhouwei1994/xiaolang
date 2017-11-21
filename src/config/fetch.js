@@ -9,9 +9,12 @@ function async(url = '', data = {}, type = 'GET', options = {}, httpUrl = baseUr
   let ajaxType = type.toUpperCase();
   url = httpUrl + url;
   let dataStr = ''; //数据拼接字符串
+  console.log(data);
   if (type == 'FORM') {
     ajaxType = 'POST';
     dataStr = data;
+  } else if (type == 'POST') {
+    dataStr = JSON.stringify(data);
   } else if (type == 'PUT') {
     if (options.putType == 'file') {
       dataStr = data;
@@ -58,7 +61,7 @@ function async(url = '', data = {}, type = 'GET', options = {}, httpUrl = baseUr
       requestObj.open(ajaxType, url, true);
       // requestObj.withCredentials = true;//通过将withCredentials属性设置为true，可以指定某个请求应该发送凭据
       if (type != 'FORM') {
-        if (type == 'PUT' && options.putType != 'file') {
+        if (type == 'PUT' && options.putType != 'file' || type == 'POST') {
           requestObj.setRequestHeader("Content-Type", "application/json");
         } else if (type != 'PUT') {
           requestObj.setRequestHeader("Content-Type", "application/x-www-form-urlencoded; charset=UTF-8");

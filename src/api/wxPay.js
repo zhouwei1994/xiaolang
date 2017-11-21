@@ -2,45 +2,24 @@ import wx from 'weixin-js-sdk';
 import { async } from '@/config/fetch';
 import store from '@/config/store';
 
-function wxPay(type) {
+function wxPay(info) {
   return new Promise((resolve, reject) => {
-    var body, description, origin = type, subject, totalAmount, uid = store.state.userInfo.userId;
-    if (type == 2) {
-      body = '小狼人二级商家代理开通支付金额。';
-      description = '二级商家代理';
-      subject = '小狼人二级商家代理';
-      totalAmount = 268;
-    } else if (type == 3) {
-      body = '小狼人三级商家代理开通支付金额。';
-      description = '三级商家代理';
-      subject = '小狼人三级商家代理';
-      totalAmount = 88;
-    } else if (type == 91) {
-      body = '小狼人推广代理（小灰灰）开通支付金额。';
-      description = '推广代理（小灰灰）';
-      subject = '小狼人推广代理（小灰灰）';
-      totalAmount = 88;
-    } else if (type == 91) {
-      body = '小狼人推广代理（灰太狼）开通支付金额。';
-      description = '推广代理（灰太狼）';
-      subject = '小狼人推广代理（灰太狼）';
-      totalAmount = 88;
-    } else if (type == 93) {
-      body = '小狼人推广代理（红太狼）开通支付金额。';
-      description = '推广代理（红太狼）';
-      subject = '小狼人推广代理（红太狼）';
-      totalAmount = 88;
-    }
+    var body, description, origin = info.code, subject, totalAmount, uid = store.state.userInfo.userId;
+    body = '小狼人' + info.name+'开通支付金额。';
+    description = info.name;
+    subject = '小狼人' + info.name;
+    totalAmount = info.price;
+    console.log(body, description, origin, subject, totalAmount, uid);
     async('user/signOrder', { body, description, origin, subject, totalAmount, uid }, 'POST').then(
       data => {
         if (data.code == 200) {
           function onBridgeReady() {
-            wx.invoke(
+            WeixinJSBridge.invoke(
               'getBrandWCPayRequest', {
                 "appId": data.data.appId,     //公众号名称，由商户传入
                 "timeStamp": data.data.timeStamp,         //时间戳，自1970年以来的秒数
                 "nonceStr": data.data.nonceStr, //随机串
-                "package": data.data.pacKageValue,
+                "package": data.data.packageValue,
                 "signType": data.data.signType,         //微信签名方式：
                 "paySign": data.data.paySign //微信签名
               },
@@ -53,7 +32,7 @@ function wxPay(type) {
               }
             );
           }
-          if (typeof wx == "undefined") {
+          if (typeof WeixinJSBridge == "undefined") {
             if (document.addEventListener) {
               document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
             } else if (document.attachEvent) {
@@ -63,6 +42,8 @@ function wxPay(type) {
           } else {
             onBridgeReady();
           }
+        } else {
+          reject(data.msg);
         }
       }
     );

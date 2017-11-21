@@ -18,7 +18,7 @@ const state = {
   direction: 'forward',
   //用户信息
   userInfo:{
-    userId:70
+    userId:74
   },
 }
 //缓存浏览器的数据名称
